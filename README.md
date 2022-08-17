@@ -1,0 +1,2 @@
+# BlazorWasmTemplate
+Blazor WASM Template
