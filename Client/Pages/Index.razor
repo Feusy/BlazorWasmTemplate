@@ -1,0 +1,22 @@
+@page "/"
+
+<Home />
+
+<MudScrollToTop>
+    <MudFab Color="Color.Primary" Icon="@Icons.Filled.ArrowCircleUp" />
+</MudScrollToTop>
+
+<Reference />
+
+<Prices />
+
+<Contact />
+
+<MudGrid>
+    <MudItem>
+        <MudPaper Class="mud-width-full" Elevation="0" Style="@($"background:{Colors.Blue.Accent3};height:64px;position:absolute;bottom:0;height:50px;")">
+            <MudText Class="d-flex justify-cetner flex-grow-1 pa-2" style="color:white;" >Ⓒ2022 All rights reseved</MudText>  
+        </MudPaper>      
+    </MudItem>
+</MudGrid>
+

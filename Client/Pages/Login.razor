@@ -1,0 +1,70 @@
+﻿@page "/login"
+
+@using Blazored.LocalStorage
+@inject IUserViewModel _userViewModel
+@inject NavigationManager _navMan
+@inject ILocalStorageService _localStorage
+
+<MudGrid >
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="d-flex flex-column align-center mud-width-full py-8">
+            <MudText Typo="Typo.h3" Class="pt-16 mb-16" Style="font-weight:bold" Color="Color.Primary">LOGIN</MudText>
+            <MudTextField Label="Email" Variant="Variant.Text" Style="width:300px;" @bind-Value="_userViewModel.User.Email"></MudTextField><br />
+            <MudTextField Label="Password" Variant="Variant.Text" Style="width:300px;" @bind-Value="_userViewModel.User.Password" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="PasswordHide" AdornmentAriaLabel="Show Password" ></MudTextField><br />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="@AuthenticateJWT">LOGIN</MudButton><br />
+            <MudLink href="forgottpassword">Forgott Password</MudLink><br />
+            <MudLink href="register">Sign up</MudLink>
+            @if (errorMsg != null)
+            {
+            <p style="color:red">@errorMsg</p>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code{
+
+    string errorMsg = null;
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected override void OnInitialized()
+    {
+        _userViewModel.User = new();
+    }
+
+    public async Task AuthenticateJWT()
+    {
+
+
+        string token = await _userViewModel.AuthenticateJWT();
+
+        if (token != null)
+        {
+            await _localStorage.SetItemAsync("jwt_token", token);
+            _navMan.NavigateTo("/", true);
+        }
+        else
+        {
+            errorMsg = "Invalid username or password!";
+        }
+
+    }
+
+
+      void PasswordHide()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

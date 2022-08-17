@@ -1,0 +1,19 @@
+<div id="ContactElementId" style="padding-top:70px">
+
+</div>
+<MudGrid id="contact" Class="mud-width-full ma-16">
+      <MudItem>
+        <MudImage Height="500" ObjectFit="ObjectFit.Fill" Src="img/contact.jpg"/>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Elevation="0">
+              <MudText Typo="Typo.h3" Class="pt-12" Style="font-weight:bold;text-align:center;" Color="Color.Primary">Contact with us</MudText>
+            <MudForm Class="ma-12">
+                <MudTextField T="string" Label="Name" Required="true" RequiredError="Name is required!"/>
+                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"/>
+                <MudTextField T="string" Label="Phone" Required="true" RequiredError="Phone number is required!"/>
+            </MudForm>
+             <MudButton Class="ma-12" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" Color="Color.Primary" Size="Size.Large">Send</MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

@@ -1,0 +1,52 @@
+﻿@page "/register"
+@using Models
+
+@inject IUserViewModel _userViewModel
+@inject NavigationManager _navMan
+
+
+<MudGrid xs="12">
+    <MudPaper Elevation="0" Class="d-flex justify-center flex-grow-1 py-8">
+        <MudItem Class="align-center">
+            <MudForm Class="pa-8">
+                <MudText Typo="Typo.h3" Class="pt-16 mb-16" Style="font-weight:bold" Color="Color.Primary">Register</MudText>
+                <MudTextField Label="Name" Variant="Variant.Text" Style="width:300px;" @bind-Value="_userViewModel.User.Name" />
+                <MudTextField Label="Email" Variant="Variant.Text" Style="width:300px;" @bind-Value="_userViewModel.User.Email" />
+                <MudTextField Label="Password" Variant="Variant.Text" Style="width:300px;" @bind-Value="_userViewModel.User.Password" />
+                <MudTextField Label="Confirm Password" Variant="Variant.Text" Style="width:300px;" @bind-Value="confirmPass" />
+                 <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mb-8 mt-8" @onclick="ConfrimRegister">Register</MudButton>
+            </MudForm>
+           
+     @if (errorMsg != null)
+    {
+        <p style="color:red">@errorMsg</p>
+    }
+    </MudItem>
+    </MudPaper>
+</MudGrid>
+
+@code{
+    string confirmPass = null;
+    string errorMsg = null;
+
+    protected override void OnInitialized()
+    {
+        _userViewModel.User = new User();
+    }
+
+    private void ConfrimRegister()
+    {
+        if (confirmPass == _userViewModel.User.Password)
+        {
+            _userViewModel.NewUser();
+            if (_userViewModel.User != null)
+            {
+                _navMan.NavigateTo("login", true);
+            }
+        }
+        else
+        {
+            errorMsg = "Invalid password";
+        }
+    }
+}

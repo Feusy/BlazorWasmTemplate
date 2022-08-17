@@ -1,0 +1,45 @@
+﻿@page "/profile"
+@using Blazored.LocalStorage
+
+@inject IUserViewModel _userViewModel
+@inject ILocalStorageService _localStorage
+@if (_userViewModel.User != null)
+{
+    <MudGrid xs=12>
+        <MudPaper Class="d-flex flex-column align-center mud-width-full py-8">
+            <MudItem>
+                 <h2>Profile</h2>
+        <MudTextField Label="Name" Variant="Variant.Text" @bind-Value="@_userViewModel.User.Name" /><br />
+        <MudTextField Label="Email" Variant="Variant.Text" @bind-Value="@_userViewModel.User.Email" /><br />
+        <MudTextField Label="Password" Variant="Variant.Text" @bind-Value="@_userViewModel.User.Password" /><br />
+        <MudTextField Label="Confirm Password" Variant="Variant.Text" @bind-Value="@_userViewModel.User.Password" /><br />
+        <MudSelect @bind-Value="_userViewModel.User.Role">
+            @foreach (var role in Enum.GetValues(typeof(Models.Roles)))
+            {
+                <MudSelectItem Value="@role">@role</MudSelectItem>
+            }
+        </MudSelect><br/>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="_userViewModel.EditUser">Update</MudButton>
+            </MudItem>
+        </MudPaper>
+    </MudGrid>
+}
+
+
+
+
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var token = await _localStorage.GetItemAsStringAsync("jwt_token");
+            _userViewModel.User = await _userViewModel.GetUserByJWTAsync(token.ToString());
+        }
+    }
+}

@@ -1,0 +1,61 @@
+﻿@inherits LayoutComponentBase
+
+@using Blazored.LocalStorage
+
+@inject ILocalStorageService _localStorage
+@inject NavigationManager _navMan
+@inject IJSRuntime _jsRuntime
+
+<MudThemeProvider Theme="theme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Style="@($"background:{Colors.Blue.Accent3};")">
+        <MudIcon Icon="@Icons.Filled.AllInclusive" Class="mr-4" />
+        <MudText Typo="Typo.h5">Website</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Text" Color="Color.Inherit" @onclick="@(() =>ScrollTo("HomeElementId"))">Home</MudButton>
+        <MudButton Variant="Variant.Text" Class="ml-4" Color="Color.Inherit" @onclick="@(() =>ScrollTo("ReferenceElementId"))">Reference</MudButton>
+        <MudButton Variant="Variant.Text" Class="ml-4" Color="Color.Inherit" @onclick="@(() =>ScrollTo("PriceElementId"))">Prices</MudButton>
+        <MudButton Variant="Variant.Text" Class="ml-4" Color="Color.Inherit" @onclick="@(() =>ScrollTo("ContactElementId"))">Contact</MudButton>
+        <MudSpacer />
+        <MudItem Class="mr-16"></MudItem>
+        <MudItem Class="mr-16"></MudItem>
+        <AuthorizeView>
+            <Authorized>
+                <MudButton Variant="Variant.Text">Admin</MudButton>
+                <MudButton Variant="Variant.Text" OnClick="Logout">Log out</MudButton>
+            </Authorized>
+        </AuthorizeView>
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+
+@code{
+
+    MudTheme theme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = Colors.Blue.Accent3
+        }
+    };
+
+    private async Task ScrollTo(string elementName)
+    { 
+        await _jsRuntime.InvokeAsync<string>("ScrollToElement", elementName);   
+    }
+            
+    private async Task Logout()
+    {
+        await _localStorage.RemoveItemAsync("jwt_token");
+        _navMan.NavigateTo("/", true);
+    }
+}
+
+
+
